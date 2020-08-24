@@ -22,5 +22,5 @@ GET `/user` which returns account details of authenticated account
 
 POST `/transaction/lend` which charges the authenicated lender and adds the captured amount to the borrower's account
 
-POST `/tansaction/disburse` which disburses a specified amount from the authenticated user.
+POST `/transaction/disburse` which disburses a specified amount from the authenticated user.
 

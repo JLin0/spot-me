@@ -14,9 +14,9 @@ app.use(spotterRouter);
 app.use(transactionRouter);
 
 app.get('/', (req, res) => {
-    res.status(200).send("Hello from the spot-me home endpoint.");
+    res.status(200).send('Hello from the spot-me home endpoint.');
 });
 
 app.listen(port, () => {
-    console.log("The server is up and running.");
+    console.log('The server is up and running.');
 });

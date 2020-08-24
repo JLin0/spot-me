@@ -1,40 +1,40 @@
-const express = require("express");
+const express = require('express');
 const router = new express.Router();
-const auth = require("../middleware/auth");
-const lender = require("../models/user");
-const transaction = require("../models/transaction");
+const auth = require('../middleware/auth');
+const User = require('../models/user');
+const transaction = require('../models/transaction');
 const stripe = require('../services/stripe');
 
-router.post("/transaction/lend", auth, async (req, res) => {
-    console.log("Hello from lend");
+router.post('/transaction/lend', auth, async (req, res) => {
+    console.log('Hello from lend');
     
     try {
-        chargeResponse = stripe.charge(req.query.amount, req);
+        chargeResponse = await stripe.createCharge(req.body.amount, req.body.chargeDescription, req.body.chargeSource);
 
         // Add borrowed money to recipient's withdrawable balance. 
-        const recipient = await User.findById(req.query.recipient);
-        recipient.withdrawableBalance += charge.amount;
-        await recipient.save()
+        const recipient = await User.findById(req.body.recipient);
+        if (chargeResponse.captured){
+            recipient.withdrawableBalance += chargeResponse.amount;
+            await recipient.save()
+        }
 
         // Log this lending transaction.
         const trans = new transaction({
-            borrower: req.query.recipient,
-            lender: req.query.uuid,
-            amount: charge.amount,
+            borrower: req.body.recipient,
+            lender: req.user._id,
+            amount: req.body.amount,
             type: 'lending'
         });
         await trans.save();
 
-        res.status(200).send(charge.amount.toString())
+        res.status(200).send(chargeResponse.amount.toString())
     } catch (e) {
-        console.log("There has been an error in attempt to charge");
-        console.log(e);
-        return res.send(e)
+        return res.send(e.toString());
     } 
 });
 
-router.post("/transaction/disburse", auth, async (req, res) => {
-    console.log("Hello from disburse");
+router.post('/transaction/disburse', auth, async (req, res) => {
+    console.log('Hello from disburse');
     const user = await lender.findOne({
         _id: req.params.id
     })
