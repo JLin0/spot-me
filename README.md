@@ -10,6 +10,17 @@ Then run `npm start`
 
 The endpoints are:
 
-POST `/` which creates an account
+POST `/user/create` which creates an account
 
-GET ``
+POST `/user/login` which logs in and provides a json webtoken for authentication
+
+POST `/user/logout` which logs out a single json web token
+
+POST `/user/logoutAll` which logs out all active json web tokens
+
+GET `/user` which returns account details of authenticated account
+
+POST `/transaction/lend` which charges the authenicated lender and adds the captured amount to the borrower's account
+
+POST `/tansaction/disburse` which disburses a specified amount from the authenticated user.
+

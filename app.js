@@ -17,6 +17,6 @@ app.get('/', (req, res) => {
     res.status(200).send("Hello from the spot-me home endpoint.");
 });
 
- app.listen(port, () => {
-     console.log("The server is up and running.");
- });
+app.listen(port, () => {
+    console.log("The server is up and running.");
+});
