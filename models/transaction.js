@@ -23,7 +23,7 @@ const transactionSchema = new mongoose.Schema({
         type: String,
         default: "No description"
     }
-})
+});
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 

@@ -6,8 +6,6 @@ const transaction = require('../models/transaction');
 const stripe = require('../services/stripe');
 
 router.post('/transaction/lend', auth, async (req, res) => {
-    console.log('Hello from lend');
-    
     try {
         chargeResponse = await stripe.createCharge(req.body.amount, req.body.chargeDescription, req.body.chargeSource);
 
@@ -28,14 +26,13 @@ router.post('/transaction/lend', auth, async (req, res) => {
         });
         await newTransaction.save();
 
-        res.status(200).send(chargeResponse.amount.toString());
+        res.status(200).send(newTransaction);
     } catch (e) {
         return res.status(400).send(e.toString());
     } 
 });
 
 router.post('/transaction/disburse', auth, async (req, res) => {
-    console.log('Hello from disburse');
     const user = await lender.findOne({
         _id: req.params.id
     })
