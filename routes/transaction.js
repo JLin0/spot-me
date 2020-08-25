@@ -36,15 +36,29 @@ router.post('/transaction/lend', auth, async (req, res) => {
 router.post('/transaction/disburse', auth, async (req, res) => {
     const user = req.user;
     
-    if (user.withdrawableBalance < req.body.amount) {
-        return res.status(400).send({error: `User ${user._id} has an insufficient balance.`})
-    }
-
-    // Deduct the withdrawn amount
-    user.withdrawableBalance -= req.body.amount;
-    await user.save();
+    try {
+        if (user.withdrawableBalance < req.body.amount) {
+            throw new Error(`User ${user._id} has an insufficient balance.`);
+        }
     
-    res.status(200).send({message: `User ${user._id} has successfully withdrawn an amount of ${req.body.amount}.`});
+        // Log this lending transaction.
+        const newTransaction = new transaction({
+            borrower: user._id,
+            lender: user._id,
+            amount: req.body.amount,
+            type: 'disburse',
+            description: req.body.description
+        });
+        await newTransaction.save();
+    
+        // Deduct the withdrawn amount
+        user.withdrawableBalance -= req.body.amount;
+        await user.save();
+        
+        res.status(200).send(newTransaction);
+    } catch (e) {
+        res.status(400).send(e.toString())
+    }
 });
 
 module.exports = router;
