@@ -4,7 +4,7 @@ This is a revisit of a node.js application that I made for a university hackatho
 Before running this make sure you have npm installed.
 If you don't you can download it [here](https://www.npmjs.com/get-npm)
 
-You may need to acquire a Stripe account and some MongoDB manager to satisfy dependencies. Personally, I am using the dotenv package to manage local environment variables. Check dotenv [here](https://www.npmjs.com/package/dotenv).
+You may need to acquire a Stripe account and some MongoDB manager to satisfy dependencies. Personally, I am using the dotenv package to manage local environment variables. Check dotenv out [here](https://www.npmjs.com/package/dotenv).
 
 Now, With this project cloned and with your current directory set to the root of this project.
 Run `npm i`
