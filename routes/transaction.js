@@ -32,20 +32,19 @@ router.post('/transaction/lend', auth, async (req, res) => {
     } 
 });
 
+// disburse from authenticated account
 router.post('/transaction/disburse', auth, async (req, res) => {
-    const user = await lender.findOne({
-        _id: req.params.id
-    })
-
-    if (user.withdrawableBalance < req.query.amount) {
+    const user = req.user;
+    
+    if (user.withdrawableBalance < req.body.amount) {
         return res.status(400).send({error: `User ${user._id} has an insufficient balance.`})
     }
 
     // Deduct the withdrawn amount
-    user.withdrawableBalance -= req.query.amount;
+    user.withdrawableBalance -= req.body.amount;
     await user.save();
     
-    res.status(200).send({message: `User ${user._id} has withdrawn.`});
+    res.status(200).send({message: `User ${user._id} has successfully withdrawn an amount of ${req.body.amount}.`});
 });
 
 module.exports = router;
