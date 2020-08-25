@@ -19,17 +19,18 @@ router.post('/transaction/lend', auth, async (req, res) => {
         }
 
         // Log this lending transaction.
-        const trans = new transaction({
+        const newTransaction = new transaction({
             borrower: req.body.recipient,
             lender: req.user._id,
             amount: req.body.amount,
-            type: 'lending'
+            type: 'lending',
+            description: chargeResponse.description
         });
-        await trans.save();
+        await newTransaction.save();
 
-        res.status(200).send(chargeResponse.amount.toString())
+        res.status(200).send(chargeResponse.amount.toString());
     } catch (e) {
-        return res.send(e.toString());
+        return res.status(400).send(e.toString());
     } 
 });
 

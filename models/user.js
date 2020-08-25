@@ -4,11 +4,11 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
-    fName : {
+    firstName : {
         type: String,
         required: true
     },
-    lName: {
+    lastName: {
         type: String,
         required: true
     },
@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
     }]
 });
 
+// Remove sensitive information before return user info back to endpoint caller.
 userSchema.methods.toJSON = function() {
     const user = this;
     const userObject = user.toObject();
@@ -50,6 +51,7 @@ userSchema.methods.toJSON = function() {
     return userObject;
 };
 
+// Generate a json web token with user id and our secret key phrase.
 userSchema.methods.generateAuthToken = async function() {
     const user = this;
 
@@ -61,13 +63,13 @@ userSchema.methods.generateAuthToken = async function() {
     return token;
 }
 
+// See if there is a user with such an email and password.
 userSchema.statics.verifyCredentials = async (email, password) => {
-    const user = User.findOne({ email });
-    if (!user) {
-        throw new Error('Failed to login. Your email or username is incorrect.');
+    const user = await User.findOne({ email });
+    if (!user){
+        throw new Error();
     }
-
-    const isMatch = bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password)
     if (!isMatch) {
         throw new Error('Failed to login. Your email or username is incorrect.');
     }
@@ -75,16 +77,17 @@ userSchema.statics.verifyCredentials = async (email, password) => {
     return user;
 };
 
+// hash password again in case it is changed.
 userSchema.pre('save', async function(next) {
     const user = this;
 
-    if (user.isModified('password')){
+    if (user.isModified('password')) {
         user.password = await bcrypt.hash(user.password, 8);
     }
 
     next();
 });
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;

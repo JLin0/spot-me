@@ -18,8 +18,13 @@ const transactionSchema = new mongoose.Schema({
     ts: {
         type: Date,
         default: Date.now
+    },
+    description: {
+        type: String,
+        default: "No description"
     }
 })
 
-const Transaction = mongoose.model('transaction', transactionSchema)
+const Transaction = mongoose.model('Transaction', transactionSchema);
+
 module.exports = Transaction;
