@@ -1,5 +1,5 @@
 # spot-me
-This is a revisit of a node.js application that I made for a university hackathon. It was originally used in conjunction with a front-end iOS app that allowed users to find nearby "spotters" (what we called our users) via Google Maps API. The app would also find ways for users to be incentivized to save money and have spare change to "spot" someone. The repo that you are looking at contains a REST API that is powered by Stripe to move money from one user account to another.
+This is a revisit of a node.js application that I made for a university hackathon. It was originally used in conjunction with a front-end app that allowed users to find nearby "spotters" (what we called our users) via Google Maps API. The app would also find ways for users to be incentivized to save money and have spare change to "spot" someone. The repo that you are looking at contains a REST API that is powered by Stripe to move money from one user account to another.
 
 Before running this make sure you have npm installed.
 If you don't you can download it [here](https://www.npmjs.com/get-npm)
